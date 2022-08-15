@@ -1,3 +1,4 @@
+import router from '@/router'
 import { createStore } from 'vuex'
 
 export default createStore({
@@ -18,14 +19,20 @@ export default createStore({
     },
     set(state, payload){
       state.tareas.push(payload)
-      
+      localStorage.setItem('tareas', JSON.stringify(state.tareas)) //guardar
     },
     eliminar(state, payload){
       state.tareas = state.tareas.filter(item => item.id !== payload)//filtramos todos los ids distintos al id que le estamos enviando 
+      localStorage.setItem('tareas', JSON.stringify(state.tareas))
     },
     tarea(state, payload){
-      state.tarea = state.tareas.find( item => item.id === payload)
+      state.tarea = state.tareas.find( item => item.id === payload)//guardar
+    },
+    update(state, payload) {
+      state.tareas = state.tareas.map(item => item.id === payload.id ? payload : item)
+      localStorage.setItem('tareas', JSON.stringify(state.tareas))
     }
+    
   },
   actions: {
     cargarLocalStorage({commit}){
@@ -45,7 +52,11 @@ export default createStore({
     },
     setTarea({commit}, id){
       commit('tarea', id)
-    }  
+    },
+    updateTarea({ commit }, tarea) {
+      commit('update', tarea)
+      router.push('/')
+    }
     },
   modules: {
   }

@@ -1,6 +1,6 @@
 <template>
   Editar {{$route.params.id}} - {{tarea}}
-  <form>
+  <form class="mt-3" @submit.prevent="updateTarea(tarea)">
     <Input :tarea="tarea" />
   </form>
 </template>
