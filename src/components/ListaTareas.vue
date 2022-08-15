@@ -25,7 +25,23 @@
                 </td>
                 <td>{{item.estado}}</td>
                 <td>{{item.numero}}</td>
-                <td>Accion</td>
+                <td>
+                    <button class="btn btn-danger btn-sm" @click="deleteTareas(item.id)">
+                        Eliminar 
+                    </button>
+                     
+                    <router-link class="btn btn-warning ml-2 btn-sm" 
+                    :to="{ //viajamos a la pagina editar y al parametro
+                        name:'Editar',
+                        params:{
+                            id: item.id
+                        }
+                        }"
+                    >
+                        Editar
+                    </router-link>
+                </td>
+
             </tr>
             
         </tbody>
@@ -35,10 +51,14 @@
 </template>
 
 <script>
-import {mapState} from 'vuex'
+import {mapState, mapActions} from 'vuex'
 export default{
     computed:{
         ...mapState(['tareas'])
+    },
+    methods:{
+        ...mapActions(['deleteTareas'])
+
     }
 
 }
