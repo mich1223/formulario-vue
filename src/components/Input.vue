@@ -33,7 +33,7 @@
       </div>
     </div>
     <div class="mt-2">
-      <input type="number" class="form-control" vmodel.number="tarea.numero">
+      <input type="number" class="form-control" placeholder="numero" v-model.number="tarea.numero">
     </div>
      <button class="btn btn-dark mt-2 btn-block" 
      type="submit" :disabled="bloquear">
@@ -44,11 +44,16 @@
 
 <script>
 export default{
+    props:{
+      tarea: Object
+    },
+     computed:{
+      bloquear(){
+        return this.tarea.nombre.trim() === "" ? true : false
+      }
+    }
 
 }
 
 </script>
 
-<style>
-
-</style>
