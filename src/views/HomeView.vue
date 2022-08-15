@@ -1,60 +1,25 @@
 <template>
   <form @submit.prevent="procesarFormulario">
-    <input type="text" 
-    class="form-control my-2"
-    placeholder="Nombre tarea"
-    v-model.trim="tarea.nombre" 
-    > <!--v-model guarda el texto del input  en "texto".....  .trim limpia el v-model-->
-    <p>{{tarea.nombre}}</p> <!--Devuelve el texto del input-->
-    <!-- checkbox -->
-    <div class="form-check form-check-inline">
-        <input class="form-check-input" type="checkbox" id="Check1" v-model="tarea.categorias" value="Javascript">
-        <label class="form-check-label" for="Check1"   >
-          Javascript
-        </label>
-    </div>
-    <div class="form-check">
-        <input class="form-check-input" type="checkbox"  id="check2" v-model="tarea.categorias" value="Nodejs">
-        <label class="form-check-label" for="check2" >
-          NodeJs
-        </label>
-    </div>
-    <div class="mt-2"> 
-      <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" name="exampleRadios" id="radio1" v-model="tarea.estado" value="Urgente" checked>
-        <label class="form-check-label" for="radio1">
-          Urgente
-        </label>
-      </div>
-      <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" name="exampleRadios" id="radio2" v-model="tarea.estado" value="Relax">
-        <label class="form-check-label" for="radio2">
-          Relax
-        </label>
-      </div>
-    </div>
-    <div class="mt-2">
-      <input type="number" class="form-control" vmodel.number="tarea.numero">
-    </div>
-     <button class="btn btn-dark mt-2 btn-block" 
-     type="submit" :disabled="bloquear">
-      Procesar 
-    </button>
-   
+  <Input :tarea="tarea"/>
   </form>
   <hr>
-  <p> {{tarea}}</p>
+  <!--<p>tarea: {{tarea}}</p>  muestra los datos de los inputs-->
+  <ListaTareas />
 </template>
 
 <script>
 // @ is an alias to /src
+import ListaTareas from '@/components/ListaTareas.vue'
 import HelloWorld from '@/components/HelloWorld.vue'
+import Input from '@/components/Input.vue'
+import { mapActions } from 'vuex'
+const shortid = require('shortid')//llamando a shortid 
 
 export default {
   name: 'HomeView',
   components: {
-    
-    },
+    Input, ListaTareas
+},
     data(){
       return{
         tarea:{ /*objeto */
@@ -66,14 +31,24 @@ export default {
       }
     },
     methods:{
+      ...mapActions(['setTareas']),
       procesarFormulario(){
         if(this.tarea.nombre.trim() === ''){
             console.log('nombre Vacío')
             return
         }
         console.log(this.tarea)
-        //Envian los datos
+        
+        //Generar id
+        this.tarea.id = shortid.generate()
+        console.log(this.tarea.id)
+        
+        //Enviar los datos
+        this.setTareas(this.tarea)
+
+        //Limpiar Datos
         this.tarea ={
+          id:'',
           nombre:'', 
           categorias: [],
           estado:'', 
@@ -81,10 +56,6 @@ export default {
         }
       }
     },
-    computed:{
-      bloquear(){
-        return this.tarea.nombre.trim() === "" ? true : false
-      }
-    }
+   
 }
 </script>
