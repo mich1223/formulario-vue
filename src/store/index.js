@@ -13,9 +13,12 @@ export default createStore({
   getters: {
   },
   mutations: {
+    cargar(state, payload){
+      state.tareas=payload
+    },
     set(state, payload){
       state.tareas.push(payload)
-      console.log(state.tareas)
+      
     },
     eliminar(state, payload){
       state.tareas = state.tareas.filter(item => item.id !== payload)//filtramos todos los ids distintos al id que le estamos enviando 
@@ -25,6 +28,15 @@ export default createStore({
     }
   },
   actions: {
+    cargarLocalStorage({commit}){
+
+      if(localStorage.getItem('tareas')){
+        const tareas = JSON.parse(localStorage.getItem('tareas'))
+        commit ('cargar', tareas )
+        return
+      }
+      localStorage.setItem('tareas', JSON.stringify([]))
+    },
     setTareas({commit}, tarea){ //Llenar el array con tareas 
       commit('set', tarea)
     },
